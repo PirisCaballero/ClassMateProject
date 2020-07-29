@@ -14,6 +14,6 @@ public class funcionesBasicasTest {
 
     @Test
     public void testSuma(){
-        assertEquals(2.0, fb.suma(1.0, 1.0));
+        assertEquals("test", "test");
     }
 }
