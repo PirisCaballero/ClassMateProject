@@ -1,5 +1,6 @@
 package com.NoisyCrow.ClassMateProject;
 import static org.junit.Assert.assertEquals;
+import com.NoisyCrow.ClassMateProject.funciones.funcionesBasicas;
 
 import org.junit.*;
 
