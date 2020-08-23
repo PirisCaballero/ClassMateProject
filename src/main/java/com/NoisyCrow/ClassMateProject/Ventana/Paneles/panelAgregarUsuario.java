@@ -1,9 +1,8 @@
 package com.NoisyCrow.ClassMateProject.Ventana.Paneles;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +25,7 @@ public class panelAgregarUsuario extends JPanel {
     private Pattern patNombre, patApellidos, patCorreo, patDNi, patFechaNacimiento;
     private JTextField nombreT, apellidosT, correoT, dniT, fechaNacimientoT;
     private Matcher matNombre, matApelldios, matCorreo, matDNI, matFechaNacimiento;
-    private boolean nombreValido, apellidosValidos, correoValido, dniValido, fechaNacimientoValida , tipoValido;
+    private boolean nombreValido, apellidosValidos, correoValido, dniValido, fechaNacimientoValida, tipoValido;
     private Choice tipoC;
 
     public panelAgregarUsuario(gestorBBDD GBD) {
@@ -118,14 +117,23 @@ public class panelAgregarUsuario extends JPanel {
                 agregarUsuario.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if(validarDatos()){
-                            JOptionPane.showMessageDialog(null, "La inscripción ha sido: "+agregarUsuario());
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Los datos aportados no son correctos, vuelva a intentarlo");
+                        if (validarDatos()) {
+                            try {
+                                JOptionPane.showMessageDialog(null, "La inscripción ha sido: " + agregarUsuario());
+                            } catch (HeadlessException e1) {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace();
+                            } catch (SQLException e1) {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Los datos aportados no son correctos, vuelva a intentarlo");
                         }
                     }
                 });
-                while(this.isAlive()){
+                while (this.isAlive()) {
                     fechaNacimientoFocus();
                     comprobarPatrones(this);
                 }
@@ -137,12 +145,17 @@ public class panelAgregarUsuario extends JPanel {
         contenedorPrincipal.add(titulo);
         add(contenedorPrincipal);
     }
-    public void resetCampos(){
-        nombreT.setText("");fechaNacimientoT.setText("");
-        apellidosT.setText("");tipoC.select(0);
-        correoT.setText("");dniT.setText("");
+
+    public void resetCampos() {
+        nombreT.setText("");
+        fechaNacimientoT.setText("");
+        apellidosT.setText("");
+        tipoC.select(0);
+        correoT.setText("");
+        dniT.setText("");
     }
-    public boolean agregarUsuario(){
+
+    public boolean agregarUsuario() throws SQLException {
         boolean usuarioCreado = this.GBS.agregarUsuario(crearUsuario());
         resetCampos();
         return usuarioCreado;

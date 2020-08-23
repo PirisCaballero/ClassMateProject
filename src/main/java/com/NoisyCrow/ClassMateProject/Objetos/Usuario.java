@@ -53,4 +53,9 @@ public class Usuario {
     public String getTipo(){
         return this.tipo;
     } 
+
+    public String[] toArray(){
+        String [] usuario = {this.getTipo() , this.getDNI()+"" , this.getNombre() , this.getApellidos() , this.getCorreo() , this.getFechaNacimiento()};
+        return usuario;
+    }
 }
