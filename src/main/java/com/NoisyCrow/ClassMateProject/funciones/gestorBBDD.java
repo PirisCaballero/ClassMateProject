@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import com.NoisyCrow.ClassMateProject.Objetos.Usuario;
@@ -21,11 +22,9 @@ public class gestorBBDD {
             e.printStackTrace();
         }
     }
-    public gestorBBDD(){
-        initialize();
-    }
 
-    public ArrayList<String> getAsignaturas(){
+    public ArrayList<String> getAsignaturas() throws SQLException {
+        initialize();
         ArrayList<String> asignaturas = new ArrayList<String>();
         String sql = "Select * from asignaturas";
         try {
@@ -34,14 +33,17 @@ public class gestorBBDD {
             while(rs.next()){
                 asignaturas.add(rs.getString(3));
             }
+            conn.close();
             return asignaturas;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
             e.printStackTrace();
+            conn.close();
             return null;
         }
     }
-    public boolean agregarUsuario(Usuario u){
+    public boolean agregarUsuario(Usuario u) throws SQLException {
+        initialize();
         if( u != null ){
             try {
                 String sql = "Insert into usuario values (? , ? , ? , ? , ? , ?)";
@@ -60,12 +62,57 @@ public class gestorBBDD {
                 conn.close();
                 return false;
             }
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println(e);
                 e.printStackTrace();
+                conn.close();
                 return false;
             }
         }else{
+            conn.close();
+            return false;
+        }
+    }
+
+    public ArrayList<Usuario> getUsuarios() throws SQLException {
+        initialize();
+        ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
+        try {
+            String sql = "select * from usuario";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                Usuario u = new Usuario(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+                listaUsuarios.add(u);
+            }
+            conn.close();
+            return listaUsuarios;
+        } catch (SQLException e) {
+            System.out.println(e);
+            e.printStackTrace();
+            conn.close();
+            return null;
+        }
+    }
+
+    public boolean eliminarUsuario(int DNI) throws SQLException {
+        initialize();
+        if( DNI >= 00000000 && DNI <= 99999999){
+            try {
+                String sql = "Delete from usuario where DNI = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, DNI);
+                int i = stmt.executeUpdate();
+                System.out.println(i);
+                return true;
+            } catch (SQLException e) {
+                System.out.println(e);
+                e.printStackTrace();
+                conn.close();
+                return false;
+            }
+        }else{
+            conn.close();
             return false;
         }
     }
