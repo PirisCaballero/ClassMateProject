@@ -1,5 +1,8 @@
 package com.NoisyCrow.ClassMateProject;
 
+import java.io.*;
+import java.net.*;
+
 import com.NoisyCrow.ClassMateProject.Ventana.ventanaPrincipal;
 
 /**
@@ -8,9 +11,8 @@ import com.NoisyCrow.ClassMateProject.Ventana.ventanaPrincipal;
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws InterruptedException
     {
-        System.out.println( "Hello World!" );
         ventanaPrincipal vn = new ventanaPrincipal();
     }
 }
