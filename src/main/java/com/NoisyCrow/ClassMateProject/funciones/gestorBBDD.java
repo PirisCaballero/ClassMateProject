@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-
+import com.NoisyCrow.ClassMateProject.Objetos.superUsuario;
 import com.NoisyCrow.ClassMateProject.Objetos.Usuario;
 
 public class gestorBBDD {
@@ -54,6 +54,38 @@ public class gestorBBDD {
                 stmt.setString(4, u.getApellidos());
                 stmt.setString(5, u.getCorreo());
                 stmt.setString(6, u.getFechaNacimiento());
+                int result = stmt.executeUpdate();
+            if(result == 1){
+                conn.close();
+                return true;
+            }else{
+                conn.close();
+                return false;
+            }
+            } catch (SQLException e) {
+                System.out.println(e);
+                e.printStackTrace();
+                conn.close();
+                return false;
+            }
+        }else{
+            conn.close();
+            return false;
+        }
+    }
+    public boolean agregarSuperUsuario(superUsuario sUser) throws SQLException{
+        initialize();
+        if( sUser != null ){
+            try {
+                String sql = "Insert into superusuario values (? , ? , ? , ? , ? , ? , ?)";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, sUser.getTipo());
+                stmt.setInt(2, sUser.getDNI());
+                stmt.setString(3, sUser.getNombre());
+                stmt.setString(4, sUser.getApellidos());
+                stmt.setString(5, sUser.getCorreo());
+                stmt.setString(6, sUser.getPassword());
+                stmt.setString(7, sUser.getFechaNacimiento());
                 int result = stmt.executeUpdate();
             if(result == 1){
                 conn.close();
