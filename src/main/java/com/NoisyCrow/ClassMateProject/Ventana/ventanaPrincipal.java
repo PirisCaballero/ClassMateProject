@@ -44,7 +44,7 @@ public class ventanaPrincipal {
     private JMenuItem archivo_paginaPrincipal;
     private JMenu superUsuario;
     private Thread ejecucionVentana, ventanaThread;
-    private File inic = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.json");
+    private File inic = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.yml");
 
     private void initialize() throws InterruptedException {
         fuenteMenusSuperior = new Font("Times New Roman ", Font.PLAIN, 20);
@@ -143,12 +143,19 @@ public class ventanaPrincipal {
                 archivo_usuario = new JMenu("Opciones de usuario");
                 archivo_paginaPrincipal = new JMenuItem("Página Principal");
                 archivo_paginaPrincipal.setFont(fuenteMenuSuperior2);
-
-                HashMap str = (HashMap)lA.getArchivo(inic);
-                if (str.get("superUsuario").equals("\"false\"")) {
-                    superUsuario = new JMenu("Super Usuario");
-                } else {
-                    superUsuario = new JMenu((String) str.get("DNI"));
+                
+                try{
+                    HashMap str = (HashMap)lA.getArchivo(inic);
+                    if(str.get("superUsuario").equals("false")){
+                        superUsuario = new JMenu("SuperUsuario");
+                        System.out.println("+");
+                    }else{
+                        superUsuario = new JMenu( ""+ str.get("dni"));
+                        System.out.println("-");
+                    }
+                }catch (IOException w ){
+                    System.out.println(w);
+                    w.printStackTrace();
                 }
 
                 superUsuario.setFont(fuenteMenuSuperior2);

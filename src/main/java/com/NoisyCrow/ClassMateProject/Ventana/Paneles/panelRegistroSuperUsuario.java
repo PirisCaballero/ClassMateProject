@@ -132,7 +132,11 @@ public class panelRegistroSuperUsuario extends JPanel{
                 verPass.setFocusable(false);
                 verPass.setBackground(Color.white);
                 File fi = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/Final_ojo.png");
-                verPass.setIcon((Icon)lA.getArchivo(fi));
+                try {
+                    verPass.setIcon((Icon)lA.getArchivo(fi));
+                } catch (Exception e) {
+                    verPass.setText("X");
+                }
                 contenedorPrincipal.add(verPass);
                 JLabel instrucciones = new JLabel();
                 String instruc = "<html><body>La contraseña tiene que tener como mínimo 6 digitos y <br> 12 como máximo,"+ 
