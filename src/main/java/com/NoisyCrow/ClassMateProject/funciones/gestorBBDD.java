@@ -12,6 +12,7 @@ import com.NoisyCrow.ClassMateProject.Objetos.Usuario;
 public class gestorBBDD {
     private String ruta = "jdbc:sqlite:src/main/java/com/NoisyCrow/ClassMateProject/DATA/Usuario.db";
     private Connection conn;
+    private lectorArchvivos lA = new lectorArchvivos();
     
     public void initialize(){
         try {
@@ -105,6 +106,31 @@ public class gestorBBDD {
             return false;
         }
     }
+    public boolean inicioSesion(int DNI , String password)throws SQLException{
+        initialize();
+        try {
+            String sql = "Select count(*) from superusuario where DNI = ? AND password = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, DNI);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            
+            if(rs.getString(1).equals("1")){
+                //TODO Cambio de estado en JSON
+                superUsuario su = getSuperUsuario(DNI, password);
+                lA.iniciarSesion(su);
+                return true;
+            }else{
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+            return false;
+        }finally{
+            conn.close();
+        }
+    }
 
     public ArrayList<Usuario> getUsuarios() throws SQLException {
         initialize();
@@ -146,6 +172,31 @@ public class gestorBBDD {
         }else{
             conn.close();
             return false;
+        }
+    }
+    public superUsuario getSuperUsuario(int DNI , String password)throws SQLException{
+        initialize();
+        superUsuario sUser = new superUsuario();
+        try {
+            String sql = "Select * from superusuario where DNI = ? AND password = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, DNI);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            sUser.setTipo(rs.getString(1));
+            sUser.setDNI(rs.getInt(2));
+            sUser.setNombre(rs.getString(3));
+            sUser.setApellidos(rs.getString(4));
+            sUser.setCorreo(rs.getString(5));
+            sUser.setPassword(rs.getString(6));
+            sUser.setFechaNacimiento(rs.getString(7));
+            return sUser;
+        } catch (SQLException e) {
+            System.out.println(e);
+            e.printStackTrace();
+            return null;
+        }finally{
+            conn.close();
         }
     }
     
