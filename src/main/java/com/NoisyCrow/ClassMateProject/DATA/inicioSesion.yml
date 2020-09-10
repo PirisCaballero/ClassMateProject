@@ -1,4 +1,5 @@
 ---
-superUsuario: true
-password: tofymimi2399
-dni: 11921168
+superUsuario: "false"
+password: ""
+nombre: ""
+dni: ""

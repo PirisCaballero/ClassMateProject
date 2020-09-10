@@ -13,10 +13,14 @@ import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelEliminarUsuario;
 import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelInferior;
 import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelPrincipal;
 import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelRegistroSuperUsuario;
+import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelSesionIniciada;
 import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelVerUsuarios;
 import com.NoisyCrow.ClassMateProject.funciones.funcionesBasicas;
 import com.NoisyCrow.ClassMateProject.funciones.gestorBBDD;
 import com.NoisyCrow.ClassMateProject.funciones.lectorArchvivos;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class ventanaPrincipal {
 
@@ -34,6 +38,7 @@ public class ventanaPrincipal {
     private static panelVerUsuarios PVU;
     private static panelEliminarUsuario PEU;
     private static panelRegistroSuperUsuario pRSU;
+    private static panelSesionIniciada pSI;
     private static ArrayList<JPanel> paneles = new ArrayList<JPanel>();
     private Thread ejecucionPaneles;
     private JMenuItem archivo_salir;
@@ -43,7 +48,8 @@ public class ventanaPrincipal {
     private JMenuItem archivo_usuario_verUsuarios;
     private JMenuItem archivo_paginaPrincipal;
     private JMenu superUsuario;
-    private Thread ejecucionVentana, ventanaThread;
+    private JMenuItem cerrarSesion;
+    private Thread ejecucionVentana, ventanaThread, actualizaDatos;
     private File inic = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.yml");
 
     private void initialize() throws InterruptedException {
@@ -68,6 +74,25 @@ public class ventanaPrincipal {
         };
         ventanaThread.start();
 
+        actualizaDatos = new Thread() {
+            @Override
+            public void run() {
+                while (ventana.isActive()) {
+                    try {
+                        HashMap str = (HashMap) lA.getArchivo(inic);
+                        if (str.get("superUsuario").equals("false")) {
+                            superUsuario.setText("SuperUsuario");
+                        } else {
+                            superUsuario.setText((String) str.get("nombre"));
+                        }
+                    } catch (IOException w) {
+                        System.out.println(w);
+                        w.printStackTrace();
+                    }
+                }
+            }
+        };
+
         ejecucionPaneles = new Thread() {
             @Override
             public void run() {
@@ -82,10 +107,12 @@ public class ventanaPrincipal {
                 pP.setName("panelPrincipal");
                 pRSU = new panelRegistroSuperUsuario(GBS);
                 pRSU.setName("panelRegistroSuperUsuario");
+                pSI = new panelSesionIniciada();
                 paneles.add(PAU);
                 paneles.add(PVU);
                 paneles.add(pP);
                 paneles.add(pRSU);
+                paneles.add(pSI);
 
                 ventana.add(pS);
                 ventana.add(pI);
@@ -94,6 +121,24 @@ public class ventanaPrincipal {
                 ventana.add(PVU);
                 ventana.add(pP);
                 ventana.add(pRSU);
+                ventana.add(pSI);
+
+                try {
+                    if (lA.estaIniciadaLaSesion()) {
+                        setPanel("panelSesionIniciada");
+                    } else {
+                        setPanel("panelPrincipal");
+                    }
+                } catch (JsonParseException e2) {
+                    // TODO Auto-generated catch block
+                    e2.printStackTrace();
+                } catch (JsonMappingException e2) {
+                    // TODO Auto-generated catch block
+                    e2.printStackTrace();
+                } catch (IOException e2) {
+                    // TODO Auto-generated catch block
+                    e2.printStackTrace();
+                }
 
                 ActionListener exit = new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
@@ -130,6 +175,25 @@ public class ventanaPrincipal {
                         }
                     }
                 };
+                //
+                ActionListener cerrarSesionL = new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        setPanel("panelPrincipal");
+                        try {
+                            lA.cerrarSesion();
+                        } catch (JsonGenerationException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        } catch (JsonMappingException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                    }
+                };
+                cerrarSesion.addActionListener(cerrarSesionL);
 
             }
         };
@@ -150,7 +214,7 @@ public class ventanaPrincipal {
                         superUsuario = new JMenu("SuperUsuario");
                         System.out.println("+");
                     }else{
-                        superUsuario = new JMenu( ""+ str.get("dni"));
+                        superUsuario = new JMenu( ""+ str.get("nombre"));
                         System.out.println("-");
                     }
                 }catch (IOException w ){
@@ -180,6 +244,8 @@ public class ventanaPrincipal {
                 verAsignaturas.setFont(fuenteMenuSuperior2);
                 JMenuItem eliminarAsignatura = new JMenuItem("Eliminar asignatura");
                 eliminarAsignatura.setFont(fuenteMenuSuperior2);
+                cerrarSesion = new JMenuItem("Cerrar Sesión");
+                cerrarSesion.setFont(fuenteMenuSuperior2);
                 misAsignaturas.add(agregarAsignatura);
                 misAsignaturas.add(verAsignaturas);
                 misAsignaturas.add(eliminarAsignatura);
@@ -189,12 +255,13 @@ public class ventanaPrincipal {
                 archivo.add(archivo_paginaPrincipal);
                 archivo.add(superUsuario);
                 archivo.add(archivo_usuario);
+                archivo.add(cerrarSesion);
                 archivo.add(archivo_salir);
                 miCarrera.add(misAsignaturas);
                 mS.add(archivo);
                 mS.add(miCarrera);
                 ejecucionPaneles.start();
-
+                actualizaDatos.start();
                 }
         };
         

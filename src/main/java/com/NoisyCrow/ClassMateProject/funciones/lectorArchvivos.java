@@ -92,13 +92,29 @@ public class lectorArchvivos {
         inicio.put("superUsuario", in.getSuperUsuario());
         inicio.put("dni" , in.getDNI());
         inicio.put("password" , in.getPassword());
+        inicio.put("nombre" , in.getNombre());
         return inicio;
     }
 
     public void iniciarSesion(superUsuario su) throws JsonGenerationException, JsonMappingException, IOException {
         File f = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.yml");
         ObjectMapper om = new ObjectMapper(new YAMLFactory());
-        om.writeValue(f, new inic("true" , su.getDNI() , su.getPassword()));
+        om.writeValue(f, new inic("true" , ""+su.getDNI() , su.getPassword() , su.getNombre()));
+    }
+    public void cerrarSesion() throws JsonGenerationException, JsonMappingException, IOException {
+        File f = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.yml");
+        ObjectMapper om = new ObjectMapper(new YAMLFactory());
+        om.writeValue(f, new inic("false" , "", "" , ""));
+    }
+    public boolean estaIniciadaLaSesion() throws JsonParseException, JsonMappingException, IOException {
+        File f = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.yml");
+        ObjectMapper om = new ObjectMapper(new YAMLFactory());
+        inic ic = om.readValue(f , inic.class);
+        if(ic.getSuperUsuario().equals("false")){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     private void tipificarArchivos() {

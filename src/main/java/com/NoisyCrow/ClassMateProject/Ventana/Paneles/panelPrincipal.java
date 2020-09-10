@@ -36,7 +36,7 @@ public class panelPrincipal extends JPanel{
         setLayout(null);
         setBounds(0, 175, 1000, 625);
         setBorder(BorderFactory.createLineBorder(Color.green));
-        setVisible(true);
+        setVisible(false);
         setBackground(Color.white);
         panelPrincipal = new JPanel();
         panelPrincipal.setBounds(0 , 0 , 1000 , 625);
@@ -75,6 +75,7 @@ public class panelPrincipal extends JPanel{
                                     superUsuario su = gbd.getSuperUsuario(Integer.parseInt(dniT.getText()), passwordT.getText());
                                     JOptionPane.showMessageDialog(null, "El inicio de sesion ha sido: "+inicio + " Bienvenido: " + su.getNombre());
                                     lA.iniciarSesion(su);
+                                    ventanaPrincipal.setPanel("panelSesionIniciada");
                                 }else{
                                     JOptionPane.showMessageDialog(null, "El inicio de sesion ha sido: " +inicio);
                                 }
