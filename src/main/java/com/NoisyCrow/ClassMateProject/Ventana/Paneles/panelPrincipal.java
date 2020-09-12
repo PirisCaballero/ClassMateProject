@@ -22,8 +22,8 @@ public class panelPrincipal extends JPanel{
     private Font fuenteLabels = new Font("Times New Roman", Font.ITALIC , 20);
     private Thread cargaElementos , crearElementos;
     private JPanel panelPrincipal;
-    private JLabel dniL; private JTextField dniT;
-    private JLabel passwordL ; private JPasswordField passwordT;
+    private JLabel dniL; public static JTextField dniT;
+    private JLabel passwordL ; public static JPasswordField passwordT;
     private JButton logIn , singIN;
     private Pattern patDNI; private Matcher matDNI;
     private gestorBBDD gbd = new gestorBBDD();
@@ -31,6 +31,7 @@ public class panelPrincipal extends JPanel{
     private JButton verPass;
     private lectorArchvivos lA = new lectorArchvivos();
     private boolean passVisible = false;
+    public static boolean comprobarInferior = false;
 
     public panelPrincipal() {
         setLayout(null);
@@ -75,6 +76,9 @@ public class panelPrincipal extends JPanel{
                                     superUsuario su = gbd.getSuperUsuario(Integer.parseInt(dniT.getText()), passwordT.getText());
                                     JOptionPane.showMessageDialog(null, "El inicio de sesion ha sido: "+inicio + " Bienvenido: " + su.getNombre());
                                     lA.iniciarSesion(su);
+                                    ventanaPrincipal.superUsuario.setText(su.getNombre());
+                                    dniT.setText("");
+                                    passwordT.setText("");
                                 }else{
                                     JOptionPane.showMessageDialog(null, "El inicio de sesion ha sido: " +inicio);
                                 }
@@ -134,6 +138,7 @@ public class panelPrincipal extends JPanel{
                 repaint();
 
                 while(this.isAlive()){
+                   // System.out.println(panelInferior.getSet());
                     if(!dniT.getText().isEmpty()){
                         matDNI = patDNI.matcher(dniT.getText());
                         if(matDNI.find()){

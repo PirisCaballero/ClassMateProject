@@ -2,15 +2,17 @@ package com.NoisyCrow.ClassMateProject.DATA;
 
 public class inic {
     
-    public inic(String SU , int dni , String pass){
-        this.superUsuario = SU;
+    public inic(String superUsuario ,String password , String nombre , int dni){
+        this.superUsuario = superUsuario;
         this.DNI = dni;
-        this.password = pass;
+        this.password = password;
+        this.nombre = nombre;
     }
 
     private String superUsuario;
     private int DNI;
     private String password;
+    private String nombre;
 
     public inic(){}
 
@@ -31,6 +33,12 @@ public class inic {
     }
     public int getDNI(){
         return this.DNI;
+    }
+    public void setNombre(String nom){
+        this.nombre = nom;
+    }
+    public String getNombre(){
+        return this.nombre;
     }
     
 }

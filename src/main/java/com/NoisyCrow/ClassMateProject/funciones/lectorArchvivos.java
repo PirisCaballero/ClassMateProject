@@ -17,9 +17,12 @@ import javax.swing.ImageIcon;
 
 import com.NoisyCrow.ClassMateProject.DATA.inic;
 import com.NoisyCrow.ClassMateProject.Objetos.superUsuario;
+import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelInferior;
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.gson.JsonObject;
@@ -92,13 +95,39 @@ public class lectorArchvivos {
         inicio.put("superUsuario", in.getSuperUsuario());
         inicio.put("dni" , in.getDNI());
         inicio.put("password" , in.getPassword());
+        inicio.put("nombre" , in.getNombre());
         return inicio;
     }
 
     public void iniciarSesion(superUsuario su) throws JsonGenerationException, JsonMappingException, IOException {
-        File f = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.yml");
-        ObjectMapper om = new ObjectMapper(new YAMLFactory());
-        om.writeValue(f, new inic("true" , su.getDNI() , su.getPassword()));
+        panelInferior.set(false);
+        File f = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.json");
+        ObjectMapper om = new ObjectMapper();
+        om.writeValue(f, new inic("true" , su.getPassword() , su.getNombre() , su.getDNI()));
+        panelInferior.set(true);
+    }
+    public void cerrarSesion() throws JsonGenerationException, JsonMappingException, IOException {
+        panelInferior.set(false);
+        File f = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.json");
+        ObjectMapper om = new ObjectMapper();
+        om.writeValue(f, new inic("false", "pass", "nom" , 99999999));
+        panelInferior.set(true);
+    }
+
+    public inic sesionIniciada() throws JsonParseException, JsonMappingException, IOException {
+        File f = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.json");
+        ObjectMapper om = new ObjectMapper();
+        JsonNode jsonNode = om.readTree(f);
+        inic i = new inic();
+        String nom = ""+jsonNode.get("nombre");
+        String pass = ""+jsonNode.get("password");
+        String superUsuario = ""+jsonNode.get("superUsuario");
+        String var = ""+jsonNode.get("dni");
+        //System.out.println("Me cago emn la puta" + var + nom + pass + superUsuario);
+        int dni = Integer.parseInt(var);
+        i.setNombre(nom);i.setPassword(pass);i.setSuperUsuario(superUsuario);i.setDNI(dni);
+
+        return i;
     }
 
     private void tipificarArchivos() {

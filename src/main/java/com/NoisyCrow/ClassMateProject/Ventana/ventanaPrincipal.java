@@ -17,10 +17,13 @@ import com.NoisyCrow.ClassMateProject.Ventana.Paneles.panelVerUsuarios;
 import com.NoisyCrow.ClassMateProject.funciones.funcionesBasicas;
 import com.NoisyCrow.ClassMateProject.funciones.gestorBBDD;
 import com.NoisyCrow.ClassMateProject.funciones.lectorArchvivos;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class ventanaPrincipal {
 
-    private JFrame ventana;
+    public static JFrame ventana;
     private funcionesBasicas fb;
     private lectorArchvivos lA;
     private JMenuBar mS;
@@ -42,9 +45,10 @@ public class ventanaPrincipal {
     private JMenuItem archivo_usuario_eliminar;
     private JMenuItem archivo_usuario_verUsuarios;
     private JMenuItem archivo_paginaPrincipal;
-    private JMenu superUsuario;
-    private Thread ejecucionVentana, ventanaThread;
-    private File inic = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.yml");
+    public static JMenu superUsuario;
+    private JMenuItem cerrarSesion;
+    private Thread ejecucionVentana, ventanaThread , repinta;
+    private File inic = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/inicioSesion.json");
 
     private void initialize() throws InterruptedException {
         fuenteMenusSuperior = new Font("Times New Roman ", Font.PLAIN, 20);
@@ -73,7 +77,15 @@ public class ventanaPrincipal {
             public void run() {
                 pS = new panelSaludo();
                 pS.setName("panelSaludo");
-                pI = new panelInferior();
+                try {
+                    pI = new panelInferior();
+                } catch (JsonParseException e2) {
+                    e2.printStackTrace();
+                } catch (JsonMappingException e2) {
+                    e2.printStackTrace();
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                }
                 PAU = new panelAgregarUsuario(GBS);
                 PAU.setName("panelAgregarUsuario");
                 PVU = new panelVerUsuarios(GBS);
@@ -130,7 +142,38 @@ public class ventanaPrincipal {
                         }
                     }
                 };
+                //
+                ActionListener cerrarSesionL = new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        setPanel("panelPrincipal");
+                        superUsuario.setText("Super Usuario");
+                        panelPrincipal.dniT.setText("");
+                        panelPrincipal.passwordT.setText("");
+                        try {
+                            lA.cerrarSesion();
+                            setPanel("panelPrincipal");
+                        } catch (JsonGenerationException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        } catch (JsonMappingException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                    }
+                };
+                cerrarSesion.addActionListener(cerrarSesionL);
 
+            }
+        };
+        repinta = new Thread(){
+            @Override
+            public void run(){
+                while(true){
+                    ventana.repaint();
+                }
             }
         };
         ejecucionVentana = new Thread() {
@@ -146,11 +189,11 @@ public class ventanaPrincipal {
                 
                 try{
                     HashMap str = (HashMap)lA.getArchivo(inic);
-                    if(str.get("superUsuario").equals("false")){
+                    if(str.get("superUsuario").equals("\"false\"")){
                         superUsuario = new JMenu("SuperUsuario");
                         System.out.println("+");
                     }else{
-                        superUsuario = new JMenu( ""+ str.get("dni"));
+                        superUsuario = new JMenu( (String)str.get("nombre"));
                         System.out.println("-");
                     }
                 }catch (IOException w ){
@@ -160,6 +203,8 @@ public class ventanaPrincipal {
 
                 superUsuario.setFont(fuenteMenuSuperior2);
                 archivo_usuario.setFont(fuenteMenuSuperior2);
+                cerrarSesion = new JMenuItem("Cerrar Sesión");
+                cerrarSesion.setFont(fuenteMenuSuperior2);
                 archivo_usuario_agregar = new JMenuItem("Agregar usuario");
                 archivo_usuario_agregar.setFont(fuenteMenuSuperior2);
                 archivo_usuario_verUsuarios = new JMenuItem("Ver usuarios");
@@ -189,6 +234,7 @@ public class ventanaPrincipal {
                 archivo.add(archivo_paginaPrincipal);
                 archivo.add(superUsuario);
                 archivo.add(archivo_usuario);
+                archivo.add(cerrarSesion);
                 archivo.add(archivo_salir);
                 miCarrera.add(misAsignaturas);
                 mS.add(archivo);
@@ -200,8 +246,9 @@ public class ventanaPrincipal {
         
         //
         ejecucionVentana.start();
+        repinta.start();
         ////
-       ventana.repaint();
+       //ventana.repaint();
         }
         public static void setPanel(String nomPanel){
             for(JPanel p : paneles){
