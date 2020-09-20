@@ -82,7 +82,7 @@ public class panelInferior extends JPanel {
                             e.printStackTrace();
                         }
                     }
-                    System.out.println(panelInferior.comprobar);
+                    System.out.println("");
                 }
             }
         };

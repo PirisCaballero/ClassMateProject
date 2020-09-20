@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import com.NoisyCrow.ClassMateProject.Objetos.Usuario;
 import com.NoisyCrow.ClassMateProject.funciones.gestorBBDD;
 
-public class panelVerUsuarios extends JPanel {
+public class panelVerUsuarios extends JPanelE {
 
     /**
      * Aitor Piris
@@ -26,11 +26,7 @@ public class panelVerUsuarios extends JPanel {
     private Thread objetThread;
 
     public panelVerUsuarios(gestorBBDD GBD) {
-        setLayout(null);
         this.GBS = GBD;
-        setBounds(0, 175, 1000, 625);
-        setBorder(BorderFactory.createLineBorder(Color.pink));
-        setVisible(false);
         contenedorPrincipal = new JPanel();
         contenedorPrincipal.setBounds(0, 0, 1000, 625);
         contenedorPrincipal.setBackground(Color.white);

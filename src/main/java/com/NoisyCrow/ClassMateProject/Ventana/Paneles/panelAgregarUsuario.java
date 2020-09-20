@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import com.NoisyCrow.ClassMateProject.Objetos.Usuario;
 import com.NoisyCrow.ClassMateProject.funciones.gestorBBDD;
 
-public class panelAgregarUsuario extends JPanel {
+public class panelAgregarUsuario extends JPanelE {
 
     /**
      * Aitor Piris
@@ -29,11 +29,7 @@ public class panelAgregarUsuario extends JPanel {
     private Choice tipoC;
 
     public panelAgregarUsuario(gestorBBDD GBD) {
-        setLayout(null);
         this.GBS = GBD;
-        setBounds(0, 175, 1000, 625);
-        setBorder(BorderFactory.createLineBorder(Color.pink));
-        setVisible(false);
         contenedorPrincipal = new JPanel();
         contenedorPrincipal.setBackground(Color.white);
         contenedorPrincipal.setLayout(null);

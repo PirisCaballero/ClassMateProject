@@ -14,7 +14,7 @@ import com.NoisyCrow.ClassMateProject.Objetos.superUsuario;
 import com.NoisyCrow.ClassMateProject.funciones.gestorBBDD;
 import com.NoisyCrow.ClassMateProject.funciones.lectorArchvivos;
 
-public class panelRegistroSuperUsuario extends JPanel{
+public class panelRegistroSuperUsuario extends JPanelE{
 
      /**
      * Aitor Piris
@@ -38,11 +38,7 @@ public class panelRegistroSuperUsuario extends JPanel{
     private JButton verPass;
 
     public panelRegistroSuperUsuario(gestorBBDD GBD) {
-        setLayout(null);
         this.GBS = GBD;
-        setBounds(0, 175, 1000, 625);
-        setBorder(BorderFactory.createLineBorder(Color.pink));
-        setVisible(false);
         contenedorPrincipal = new JPanel();
         contenedorPrincipal.setBackground(Color.white);
         contenedorPrincipal.setLayout(null);

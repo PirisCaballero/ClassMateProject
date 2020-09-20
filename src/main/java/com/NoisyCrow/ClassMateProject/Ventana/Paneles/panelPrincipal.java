@@ -6,26 +6,32 @@ import com.NoisyCrow.ClassMateProject.Objetos.superUsuario;
 import com.NoisyCrow.ClassMateProject.Ventana.ventanaPrincipal;
 import com.NoisyCrow.ClassMateProject.funciones.gestorBBDD;
 import com.NoisyCrow.ClassMateProject.funciones.lectorArchvivos;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 
-public class panelPrincipal extends JPanel{
+public class panelPrincipal extends JPanelE {
 
     /**
-     *Aitor Piris
+     * Aitor Piris
      */
     private static final long serialVersionUID = 1L;
-    private Font fuenteLabels = new Font("Times New Roman", Font.ITALIC , 20);
-    private Thread cargaElementos , crearElementos;
+    private Font fuenteLabels = new Font("Times New Roman", Font.ITALIC, 20);
+    private Thread cargaElementos, crearElementos;
     private JPanel panelPrincipal;
-    private JLabel dniL; public static JTextField dniT;
-    private JLabel passwordL ; public static JPasswordField passwordT;
-    private JButton logIn , singIN;
-    private Pattern patDNI; private Matcher matDNI;
+    private JLabel dniL;
+    public static JTextField dniT;
+    private JLabel passwordL;
+    public static JPasswordField passwordT;
+    private JButton logIn, singIN;
+    private Pattern patDNI;
+    private Matcher matDNI;
     private gestorBBDD gbd = new gestorBBDD();
     private boolean dniValido = false;
     private JButton verPass;
@@ -34,26 +40,22 @@ public class panelPrincipal extends JPanel{
     public static boolean comprobarInferior = false;
 
     public panelPrincipal() {
-        setLayout(null);
-        setBounds(0, 175, 1000, 625);
-        setBorder(BorderFactory.createLineBorder(Color.green));
         setVisible(true);
-        setBackground(Color.white);
         panelPrincipal = new JPanel();
-        panelPrincipal.setBounds(0 , 0 , 1000 , 625);
+        panelPrincipal.setBounds(0, 0, 1000, 625);
         panelPrincipal.setBackground(Color.white);
         panelPrincipal.setLayout(null);
 
-        crearElementos = new Thread(){
+        crearElementos = new Thread() {
             @Override
-            public void run(){
+            public void run() {
                 singIN = new JButton("Registrarse");
                 logIn = new JButton("Iniciar sesión");
-                verPass  = new JButton();
-                verPass.setBounds(810 , 250 , 30 , 30);
+                verPass = new JButton();
+                verPass.setBounds(810, 250, 30, 30);
                 File fi = new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/Final_ojo.png");
                 try {
-                    verPass.setIcon((Icon)lA.getArchivo(fi));
+                    verPass.setIcon((Icon) lA.getArchivo(fi));
                 } catch (Exception e) {
                     verPass.setText("X");
                 }
@@ -63,7 +65,18 @@ public class panelPrincipal extends JPanel{
                 singIN.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ventanaPrincipal.setPanel("panelRegistroSuperUsuario");
+                        try {
+                            ventanaPrincipal.setPanel("panelRegistroSuperUsuario");
+                        } catch (JsonParseException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        } catch (JsonMappingException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
                     }
                 });
                 logIn.addActionListener(new ActionListener(){
