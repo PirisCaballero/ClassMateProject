@@ -1,8 +1,17 @@
 package com.NoisyCrow.ClassMateProject.Ventana.Paneles;
 
+import com.itextpdf.*;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.awt.*;
 import java.awt.Color;
@@ -24,6 +33,7 @@ public class panelVerUsuarios extends JPanelE {
     private JTable tablaUsuarios;
     private JScrollPane scroll;
     private Thread objetThread;
+    private com.itextpdf.text.Font fuenteTituloPDF = new com.itextpdf.text.Font(FontFactory.getFont("Times New Roman", 30 , Font.PLAIN, BaseColor.BLACK));
 
     public panelVerUsuarios(gestorBBDD GBD) {
         this.GBS = GBD;
@@ -96,6 +106,34 @@ public class panelVerUsuarios extends JPanelE {
             modeloTabla.removeRow(i);
         }
         setData();
+        generarPDF();
+    }
+    public void generarPDF(){
+        Document pdf = new Document();
+        try {
+            FileOutputStream out = new FileOutputStream("src/main/java/com/NoisyCrow/ClassMateProject/DATA/verUsuarios.pdf");
+            PdfWriter.getInstance(pdf, out).setInitialLeading(40);
+            pdf.addTitle("Ver Usuarios");
+            pdf.addAuthor("Aitor Piris Caballero");
+            pdf.open();
+
+            Paragraph titulo = new Paragraph("Ver Usuarios");
+            titulo.setFont(fuenteTituloPDF);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            pdf.add(titulo);
+
+            PdfPTable tabla = new PdfPTable(6);
+            int o = 6*modeloTabla.getRowCount();
+            for(int i = 0; i < o ; i++){
+                tabla.addCell("Celda: "+i);
+            }
+            pdf.add(tabla);
+            pdf.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
     }
     
 }

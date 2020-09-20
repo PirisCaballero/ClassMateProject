@@ -1,5 +1,4 @@
 package com.NoisyCrow.ClassMateProject.Ventana.HTTP;
-
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class http extends JPanelE {
             java.awt.Desktop escritorio = java.awt.Desktop.getDesktop();
             if(escritorio.isSupported(java.awt.Desktop.Action.BROWSE)){
                 try {
-                    String url = System.getProperty("user.dir").replaceAll("\\\\", "/")+"/src/main/java/com/NoisyCrow/ClassMateProject/http/index.html";
+                    String url = System.getProperty("user.dir").replaceAll("\\\\", "/")+"/src/main/java/com/NoisyCrow/ClassMateProject/DATA/prueba.pdf";
                     System.out.println(url);
                     java.net.URI uri = new java.net.URI(url);
                     escritorio.browse(uri);
