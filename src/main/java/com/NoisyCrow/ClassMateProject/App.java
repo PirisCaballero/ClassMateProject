@@ -1,7 +1,5 @@
 package com.NoisyCrow.ClassMateProject;
 
-import java.io.*;
-import java.net.*;
 
 import com.NoisyCrow.ClassMateProject.Ventana.ventanaPrincipal;
 

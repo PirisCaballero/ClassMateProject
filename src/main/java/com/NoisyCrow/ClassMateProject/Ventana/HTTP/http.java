@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 import java.awt.event.*;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import com.NoisyCrow.ClassMateProject.Objetos.botonAtras;
 import com.NoisyCrow.ClassMateProject.Ventana.Paneles.JPanelE;
 
 public class http extends JPanelE {
@@ -16,6 +18,7 @@ public class http extends JPanelE {
     private static final long serialVersionUID = 1L;
     private JButton enlace;
     private JPanel contenedor;
+    private botonAtras bAtras;
 
     public http() {
         setName("http");
@@ -23,7 +26,9 @@ public class http extends JPanelE {
         contenedor.setBounds(0, 0, 1000, 625);
         contenedor.setLayout(null);
         contenedor.setBackground(Color.yellow);
-
+        bAtras = new botonAtras();
+        contenedor.add(bAtras);
+        
         enlace = new JButton("Enlace");
         enlace.setBounds(100 , 100 , 150 , 50);
 
@@ -44,7 +49,7 @@ public class http extends JPanelE {
             java.awt.Desktop escritorio = java.awt.Desktop.getDesktop();
             if(escritorio.isSupported(java.awt.Desktop.Action.BROWSE)){
                 try {
-                    String url = System.getProperty("user.dir").replaceAll("\\\\", "/")+"/src/main/java/com/NoisyCrow/ClassMateProject/DATA/prueba.pdf";
+                    String url = System.getProperty("user.dir").replaceAll("\\\\", "/")+"/src/main/java/com/NoisyCrow/ClassMateProject/DATA/verUsuarios.pdf";
                     System.out.println(url);
                     java.net.URI uri = new java.net.URI(url);
                     escritorio.browse(uri);

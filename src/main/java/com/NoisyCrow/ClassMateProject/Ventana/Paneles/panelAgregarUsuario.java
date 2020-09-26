@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.NoisyCrow.ClassMateProject.Objetos.Usuario;
+import com.NoisyCrow.ClassMateProject.Objetos.botonAtras;
 import com.NoisyCrow.ClassMateProject.funciones.gestorBBDD;
 
 public class panelAgregarUsuario extends JPanelE {
@@ -27,6 +28,7 @@ public class panelAgregarUsuario extends JPanelE {
     private Matcher matNombre, matApelldios, matCorreo, matDNI, matFechaNacimiento;
     private boolean nombreValido, apellidosValidos, correoValido, dniValido, fechaNacimientoValida, tipoValido;
     private Choice tipoC;
+    private botonAtras bAtras;
 
     public panelAgregarUsuario(gestorBBDD GBD) {
         this.GBS = GBD;
@@ -34,6 +36,8 @@ public class panelAgregarUsuario extends JPanelE {
         contenedorPrincipal.setBackground(Color.white);
         contenedorPrincipal.setLayout(null);
         contenedorPrincipal.setBounds(0, 0, 1000, 625);
+        bAtras = new botonAtras();
+        contenedorPrincipal.add(bAtras);
         JLabel titulo = new JLabel("Usuarios", JLabel.CENTER);
         titulo.setBounds(0, 0, 1000, 100);
         titulo.setFont(fuenteTitulo);

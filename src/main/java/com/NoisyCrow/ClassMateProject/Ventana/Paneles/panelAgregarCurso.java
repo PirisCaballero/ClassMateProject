@@ -31,7 +31,6 @@ public class panelAgregarCurso extends JPanelE{
         contenedor.setBounds(0 , 0 , 1000 , 625);
         contenedor.setBackground(Color.white);
         contenedor.setLayout(null);
-
         crearElementos = new Thread(){
             @Override
             public void run(){

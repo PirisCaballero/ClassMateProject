@@ -1,6 +1,9 @@
 package com.NoisyCrow.ClassMateProject.Ventana;
 
 import java.io.*;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.SQLException;
@@ -78,6 +81,13 @@ public class ventanaPrincipal {
                 ventana.setJMenuBar(mS);
                 ventana.setLayout(null);
                 ventana.setResizable(false);
+                try{
+                    Image img = ImageIO.read(new File("src/main/java/com/NoisyCrow/ClassMateProject/DATA/LogoFinal.png"));
+                    ventana.setIconImage(img);
+                }catch(IOException io){
+                    System.out.println(io);
+                    io.printStackTrace();
+                }
             }
         };
         ventanaThread.start();
@@ -102,6 +112,7 @@ public class ventanaPrincipal {
                 PVU.setName("panelVerUsuarios");
                 pP = new panelPrincipal();
                 pP.setName("panelPrincipal");
+                listaPanelesAbiertos.add(pP);
                 pRSU = new panelRegistroSuperUsuario(GBS);
                 pRSU.setName("panelRegistroSuperUsuario");
                 pAC = new panelAgregarCurso();
